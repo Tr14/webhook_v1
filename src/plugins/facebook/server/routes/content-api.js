@@ -13,5 +13,13 @@ module.exports = {
                 policies: []
             }
         },
+        {
+            method: "POST",
+            path: "/webhook",
+            handler: "Facebook.webhook",
+            config: {
+                policies: []
+            }
+        },
     ]
 }

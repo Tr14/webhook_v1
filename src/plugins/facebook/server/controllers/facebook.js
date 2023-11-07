@@ -4,6 +4,7 @@ const axios = require('axios');
 
 module.exports = ({ strapi }) => ({
   async homepage(ctx) {
+    let pageToken;
     var url = ctx.request.url
     const regex = /(?<=\?code=).*/gm
     if (url.match(regex) == null) {
@@ -39,7 +40,7 @@ module.exports = ({ strapi }) => ({
       };
 
       let res_pagetoken = await axios(config_pagetoken)
-      let pageToken = res_pagetoken.data.access_token
+      pageToken = res_pagetoken.data.access_token
       console.log("\u001b[1;32m" + "PAGE_TOKEN:" + "\u001b[0m", pageToken);
 
       let subscribe_app = {
@@ -52,9 +53,13 @@ module.exports = ({ strapi }) => ({
 
       let res_subscribe_app = await axios(subscribe_app)
       console.log("\u001b[1;32m" + "res_subscribe_app:" + "\u001b[0m", res_subscribe_app);
-
-
     }
+
+    return pageToken;
     //https://www.facebook.com/v8.0/dialog/oauth?client_id=843916146887327&redirect_uri=http://localhost:1337/api/facebook/homepage
+  },
+  async webhook(ctx) {
+    ctx.body = "Success"
+    console.log(ctx.request.body)
   },
 });

@@ -47,8 +47,27 @@ export default function HomePage() {
     }
   `
 
-  function openAuthoriztion() {
-    window.open('https://www.facebook.com/v8.0/dialog/oauth?client_id=843916146887327&redirect_uri=http://localhost:1337/api/facebook/homepage', 'authoriztion', 'width=600,height=600,scrollbars=yes');
+  const styles = {
+    btnClickPrevent: {
+      pointerEvents: 'none'
+    },
+  }
+
+  function openAuthoriztion(button) {
+    const popup = window.open('https://www.facebook.com/v8.0/dialog/oauth?client_id=843916146887327&redirect_uri=http://localhost:1337/api/facebook/homepage', 'authoriztion', 'width=600,height=600,scrollbars=yes');
+    popup.onload = function () {
+      const popupdata = popup.document.getElementsByTagName("pre")[0].innerHTML
+      if (popupdata == 'Get Facebook authorization code successfully') {
+        popup.opener.document.getElementsByClassName("btn1")[0].innerText = "FACEBOOK IS AUTHORIZED!"
+        popup.close();
+        document.querySelector("btn1").addEventListener('click', function (e) {
+          e.stopPropagation();
+        })
+      } else {
+        popup.opener.document.getElementsByClassName("btn1")[0].innerText = "FAIL TO AUTHORIZE!"
+        popup.close();
+      }
+    }
   }
 
   return (
